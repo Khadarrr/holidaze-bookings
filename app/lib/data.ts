@@ -1,4 +1,4 @@
-import { RegisterUserRequest, RegisterUserResponse, LoginRequest, LoginResponse } from './types';
+import { RegisterUserRequest, RegisterUserResponse, LoginRequest, LoginResponse, Venue } from './types';
 
 const NOROFF_API_URL: string = "https://v2.api.noroff.dev";
 
@@ -95,3 +95,36 @@ export const fetchPosts = async (accessToken: string, apiKey?: string): Promise<
     console.error("Error:", error);
   }
 };
+
+export const fetchVenues = async (accessToken: string, apiKey?: string): Promise<Venue[] | undefined> => {
+  const headers: Record<string, string> = {
+    'Authorization': `Bearer ${accessToken}`
+  };
+
+  // If API key is provided, add it to the headers
+  if (apiKey) {
+    headers['X-Noroff-API-Key'] = apiKey;
+  }
+
+  const options: RequestInit = {
+    method: 'GET',
+    headers: headers,
+  };
+
+  try {
+    const response = await fetch(`${NOROFF_API_URL}/holidaze/venues`, options);
+
+    if (response.ok) {
+      const data = await response.json();
+      const venues: Venue[] = data.data.map((venueData: any) => venueData as Venue); // Assuming proper casting
+      return venues;
+    } else {
+      console.error('Failed to fetch venues:', response.statusText);
+      return undefined; // Indicate error
+    }
+  } catch (error) {
+    console.error('Error fetching venues:', error);
+    return undefined; // Indicate error
+  }
+};
+
