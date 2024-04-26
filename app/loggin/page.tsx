@@ -48,7 +48,7 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-end items-center min-h-screen bg-white">
+    <div className="flex justify-end items-center min-h-screen  bg-white">
       <div className="w-full md:w-1/2 px-4">
         <h1>
           <Image className="flex justify-center" src={Logo} alt="logo" />

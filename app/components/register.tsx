@@ -22,6 +22,7 @@ export default function Register() {
   });
 
   const [registerSuccess, setRegisterSuccess] = useState(false);
+  const [registerError, setRegisterError] = useState(false);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -38,16 +39,16 @@ export default function Register() {
 
       if (response) {
         console.log("User registered successfully:", response);
-        setRegisterSuccess(true); // Set registration success state
+        setRegisterSuccess(true); 
         setTimeout(() => {
-          window.location.href = "/loggin"; // Redirect to home page after 2 seconds
+          window.location.href = "/loggin"; 
         }, 3500);
-      } else {
-        console.error("Failed to register user");
-        // Handle failed registration (e.g., display error message)
+    } else {
+        setRegisterError(true); 
       }
     } catch (error) {
       console.error("Error:", error);
+      setRegisterError(true);
     }
   };
 
@@ -75,6 +76,24 @@ export default function Register() {
             <span>User registered successful! Redirecting...</span>
           </div>
 )}
+{registerError && (
+          <div role="alert" className="alert alert-error">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="stroke-current shrink-0 h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <span>Registration failed. please try again</span>
+          </div>
+        )}
     <form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mb-2">
@@ -119,7 +138,10 @@ export default function Register() {
         />
         <p className="text-red-500 text-xs italic">Please choose a password.</p>
       </div>
-      <button className="text-black py-2 px-4 rounded ">Register</button>
+      <button
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="submit"
+            >Register</button>
     </form>
     {registerSuccess && (
       <div className="text-center text-green-500 font-bold">
