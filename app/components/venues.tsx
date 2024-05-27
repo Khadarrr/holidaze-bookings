@@ -1,101 +1,113 @@
 "use client"
-
 import React, { useState, useEffect } from 'react';
-import { fetchVenues } from '../lib/data';
-import { Venue } from '../lib/types';
+import Link from 'next/link';
 
+interface Venue {
+  id: string;
+  name: string;
+  price: number;
+  media: { url: string; alt: string }[];
+  meta: { [key: string]: boolean };
+}
 
+const Venues: React.FC = () => {
+  const [venues, setVenues] = useState<Venue[]>([]);
+  const [visibleVenues, setVisibleVenues] = useState<Venue[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<Error | null>(null);
+  const [page, setPage] = useState<number>(1);
+  const venuesPerPage: number = 12;
 
-export default function Venues() {
-  const [venues, setVenues] = useState<Venue[]>([]); // State to store fetched venues
-  const [isLoading, setIsLoading] = useState(false); // State to indicate loading status
-  const [error, setError] = useState<string | undefined>(undefined); // State to store any error
-
-  // Function to fetch venues using the fetchVenues function
-  const fetchVenuesData = async () => {
-    setIsLoading(true); // Set loading state to true
-    setError(undefined); // Clear any previous error
-
-    try {
-      const fetchedVenues = await fetchVenues('your_access_token', 'your_api_key'); // Call the fetchVenues function with access token and API key
-      
-      if (fetchedVenues !== undefined) {
-        setVenues(fetchedVenues); // Update venues state if fetchedVenues is not undefined
-      } else {
-        // Handle the case when fetchedVenues is undefined
-        setVenues([]); // Set venues state to an empty array
-        setError('Failed to fetch venues'); // Set error message
-      }
-    } catch (error) {
-      setError('Failed to fetch venues'); // Set error message
-    } finally {
-      setIsLoading(false); // Set loading state to false regardless of success or failure
-    }
-  };
-  
-  // Fetch venues on component mount
   useEffect(() => {
-    fetchVenuesData();
-  }, []); // Empty dependency array ensures fetching only once
+    const fetchVenues = async () => {
+      try {
+        const response = await fetch(`https://v2.api.noroff.dev/holidaze/venues?sort=created&sortOrder=desc`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  // Render the content based on loading/error states and fetched venues
+        if (!response.ok) {
+          throw new Error('Failed to fetch venues');
+        }
+
+        const data = await response.json();
+        console.log('Fetched venues data:', data);
+
+        // Filter out venues without images
+        const venuesWithImages = data.data.filter((venue: Venue) => venue.media.length > 0);
+
+        setVenues(venuesWithImages); // Set venues directly without sorting
+        setVisibleVenues(venuesWithImages.slice(0, venuesPerPage));
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching venues:', error);
+        setError; // Set error state with error object
+        setLoading(false);
+      }
+    };
+
+    fetchVenues();
+  }, []);
+
+  const handleShowMore = () => {
+    const newPage = page + 1;
+    const newVisibleVenues = venues.slice(0, newPage * venuesPerPage);
+    setPage(newPage);
+    setVisibleVenues(newVisibleVenues);
+  };
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error.message}</p>;
+  }
+
   return (
-    <>
-    {isLoading && <p>Loading venues...</p>}
-    {error && <p className="error">{error}</p>}
-    {venues.length > 0 && (
-      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {venues.map((venue: Venue) => (
-          <li
-            key={venue.id}
-            className="group rounded-lg shadow-md overflow-hidden bg-white hover:shadow-lg transform hover:translate-y-1 transition duration-300 ease-in-out"
-          >
-            <img
-              src={venue.media[0]?.url}
-              alt={venue.media[0]?.alt || ""}
-              className="w-full h-48 object-cover"
-            /> {/* Fixed image size and aspect ratio */}
-            <div className="p-4">
-              <h2>{venue.name}</h2>
-              <p className="text-gray-500 mb-2">
-                {venue.description.length > 100 ? ( // Check if description is longer than 100 characters
-                  <>
-                    {venue.description.substring(0, 100)} {/* Display first 100 characters */}
-                    <span className="text-blue-500 cursor-pointer" onClick={() => console.log("Read More Clicked")}>
-                      Read More..
-                    </span>
-                    <span className="hidden">{venue.description.substring(100)}</span> {/* Hide remaining content initially */}
-                  </>
-                ) : (
-                  venue.description // Display full description if less than 100 characters
-                )}
-              </p>
-              <div className="flex justify-between items-center">
-                <p className="font-bold">Price: ${venue.price}</p>
-                <div className="flex items-center text-sm">
-                  <span className="text-yellow-400 mr-1">&#9733;</span> {/* Star icon (replace with your preferred star component) */}
-                  <span>{venue.rating}</span>
+    <div className="container mx-auto mt-8">
+      <div className="grid grid-cols-1 gap-8 px-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {visibleVenues.map((venue) => (
+          <div key={venue.id}>
+            <Link href={`/singelVenue/${venue.id}`}> {/* Corrected the variable from `id` to `venue.id` */}
+              <div className="transition-transform transform shadow-xl cursor-pointer card bg-base-100 hover:scale-105">
+                <figure>
+                  <img
+                    src={venue.media[0]?.url || 'https://via.placeholder.com/300'}
+                    alt={venue.media[0]?.alt || 'Venue Image'}
+                    className="object-cover w-full h-48 rounded-t-md"
+                  />
+                </figure>
+                <div className="p-4 card-body">
+                  <h2 className="mb-2 overflow-hidden text-lg font-semibold card-title">{venue.name}</h2>
+                  <p>Price: ${venue.price}</p>
+                  <div className="flex flex-wrap mt-2">
+                    {Object.entries(venue.meta).map(([tag, value]) => (
+                      <div
+                        key={tag}
+                        className={`badge badge-outline ${value ? 'badge-primary' : 'badge-secondary'} mr-2 mb-2`}
+                      >
+                        {tag}
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
-              <div className="flex justify-between items-center mt-4 text-sm text-gray-500">
-                <p>Max Guests: {venue.maxGuests}</p>
-                {/* Additional details (optional) */}
-                {venue.meta && (
-                  <ul className="flex space-x-2">
-                    {venue.meta.wifi && <li>Wi-Fi</li>}
-                    {venue.meta.parking && <li>Parking</li>}
-                    {venue.meta.breakfast && <li>Breakfast</li>}
-                    {venue.meta.pets && <li>Pets Allowed</li>}
-                  </ul>
-                )}
-              </div>
-            </div>
-          </li>
+            </Link>
+          </div>
         ))}
-      </ul>
-    )}
-    {venues.length === 0 && !isLoading && <p>No venues found.</p>}
-  </>
-  
+      </div>
+      {visibleVenues.length < venues.length && (
+        <div className="flex justify-center mt-8">
+          <button onClick={handleShowMore} className="px-6 py-3 text-white rounded-3xl btn btn-primary">
+            Show More Venues
+          </button>
+        </div>
+      )}
+    </div>
   );
-}
+};
+
+export default Venues;

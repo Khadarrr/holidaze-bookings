@@ -1,51 +1,55 @@
+"use client";
 import Hotel from "../../public/holizade-image.jpg";
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import Link from "next/link";
+// import BookingForm from "./bookingform";
+import { fetchVenues } from "../lib/data"; 
+import { Venue } from "../lib/types"; 
 
 export default function HeroSection() {
+  const [venueId, setVenueId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchVenueData = async () => {
+      try {
+        const fetchedVenues: Venue[] | undefined = await fetchVenues();
+        if (fetchedVenues && fetchedVenues.length > 0) {
+          setVenueId(fetchedVenues[0].id);
+        } else {
+          throw new Error('No venues available');
+        }
+      } catch (error) {
+        console.error('Error fetching venues:', error);
+        setError;
+      }
+    };
+
+    fetchVenueData();
+  }, []);
+
+  if (error) {
+    return <div className="text-red-500">Error: {error}</div>;
+  }
+
+  if (!venueId) {
+    return <div>Loading...</div>; // Display loading state while fetching venueId
+  }
+
   return (
-    <section className="hero overflow-hidden">
-      <div className="relative h-screen md:h-auto flex flex-col items-center justify-center">
-        <Image
-          className="hero-image mb-10 h-80 bg-cover bg-center bg-no-repeat md:h-[calc(100vh-106px)]"
-          src={Hotel}
-          alt="hero-image"
-        />
-        <div className="card mb-10 glass absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center z-10">
-          {" "}
-          {/* Overlayed search bar */}
-          <div className="card  text-center text-white m-10 px-4 md:px-10 z-10 h-auto">
-            {" "}
-            {/* Centered text, white color, padding, adjust height */}
-            <h1 className="text-4xl font-bold mb-4">
-              Find Your Dream Escape with Holidaze
-            </h1>{" "}
-            {/* Replace with your tagline */}
-            <p className="text-xl leading-relaxed">
-              Explore unique homes and experiences around the world.
-            </p>
-            <div className="search-bar flex items-center mt-8">
-              <input
-                type="date"
-                className="border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                placeholder="Check-in Date"
-              />
-              <input
-                type="date"
-                className="border border-gray-300 rounded-md py-2 px-3 text-gray-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 ml-2"
-                placeholder="Check-out Date"
-              />
-              <Link
-                href="" // Replace with actual search page route
-                className="btn btn-primary py-2 px-4 rounded-full text-center ml-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:bg-indigo-600"
-              >
-                Start Your Search
-              </Link>
-            </div>
-          </div>
+    <div className="hero mb-10 min-h-screen relative">
+      <Image
+        src={Hotel}
+        alt="Holidaze Image"
+        layout="fill" // This makes the image cover the entire div
+        objectFit="cover" // Optional: control how image fills container
+      />
+      <div className="hero-overlay bg-opacity-60 absolute inset-0 bg-black"></div>
+      <div className="hero-content text-center text-neutral-content relative z-10">
+        <div className="max-w-md mx-auto">
+          {/* <BookingForm venueId={venueId} /> */}
         </div>
       </div>
-    </section>
+    </div>
   );
 }

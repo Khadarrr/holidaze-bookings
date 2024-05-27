@@ -1,21 +1,17 @@
 "use client"
-import React from 'react';
-import Header from "./components/header";
-import Venues from "./components/venues";
-import HeroSection from './components/hero';
-import SideNav from './components/sidenav';
+import Venues from "../components/venues"
+import Header from "../components/header"
+import SideNav from "../components/sidenav"
 
 
-
-export default function Home({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <>
-      <Header />
-      <HeroSection/>
+export default function venuePage({
+    children,
+  }: {
+    children: React.ReactNode;
+  }) {
+    return (
+        <>
+         <Header />
       <div className="flex h-screen flex-col md:flex-row md:overflow-hidden">
           <div className="w-full flex-none md:w-64">
             <SideNav />
@@ -25,6 +21,6 @@ export default function Home({
         <Venues />
   </div></div>
         </div>
-    </>
-  );
+        </>
+    )
 }

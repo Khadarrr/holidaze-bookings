@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
 import { lusitana } from "./ui/fonts";
 import "./globals.css";
+import { Roboto } from 'next/font/google';
 
 
-
+const roboto = Roboto({
+  weight: ['500'],
+  subsets: ['latin'],
+});
 
 
 export const metadata: Metadata = {
@@ -18,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={lusitana.className}>{children}</body>
+      <body className={roboto.className}>{children}</body>
     </html>
   );
 }
