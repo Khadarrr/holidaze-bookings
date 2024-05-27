@@ -3,11 +3,7 @@ import AllProfilesPage from "../components/community"
 import Header from "../components/header"
 import SideNav from "../components/sidenav"
 
-export default function community({
-    children,
-  }: {
-    children: React.ReactNode;
-  }) {
+export default function community({ children }: { children: React.ReactNode }) {
     return (
         <>
         <Header />
