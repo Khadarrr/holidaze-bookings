@@ -17,6 +17,8 @@ export interface RegisterUserRequest {
     url: string;
     alt?: string; // Optional
   }
+
+  
   
   export interface RegisterUserResponse {
     data: {
@@ -45,6 +47,7 @@ export interface RegisterUserRequest {
     };
     meta: {};
   }
+
 
   export interface Venue {
     id: string;
@@ -78,19 +81,114 @@ export interface RegisterUserRequest {
   export interface User {
     name: string;
     email: string;
-    bio?: string; // Optional
+
     avatar?: Avatar; // Optional
-    banner?: Banner; // Optional
+  
   }
   
   export interface Booking {
+    venue: any;
+    data: {
+      id: string;
+      dateFrom: string;
+      dateTo: string;
+      guests: number;
+      created: string;
+      updated: string;
+      customer: User;
+      venueId: string;
+      venue: Venue;
+    };
+  }
+  
+
+export interface CreateBookingRequest {
+  dateFrom: string; // Instance of new Date()
+  dateTo: string; // Instance of new Date()
+  guests: number;
+  venueId: string; // The id of the venue to book
+}
+
+
+export interface CreateBookingResponse {
+  data: {
     id: string;
     dateFrom: string;
     dateTo: string;
     guests: number;
     created: string;
     updated: string;
-    customer: User;
+  };
+  meta: Record<string, any>; 
+}
+
+
+  export interface Profile {
+    data: {  
+      name: string;
+      email: string;
+      bio?: string; 
+      avatar: {
+        url: string;
+        alt: string;
+      };
+      banner: {
+        url: string;
+        alt: string;
+      };
+      venueManager: boolean;
+      _count: {
+        venues: number;
+        bookings: number;
+      };
+    };
+  }
+  
+  export interface ProfileUpdate {
+    bio?: string;
+    avatar?: {
+      url: string;
+      alt: string;
+    };
+    banner?: {
+      url: string;
+      alt: string;
+    };
+    venueManager?: boolean;
+  }
+  
+  export interface LoginResponseWithApiKey {
+    apiKey?: string; // The API key string
   }
    
+  interface ProfileData {
+    name: string;
+    email: string;
+    bio?: string;
+    avatar: {
+      url: string;
+      alt: string;
+    };
+    banner: {
+      url: string;
+      alt: string;
+    };
+    venueManager: boolean;
+    _count: {
+      venues: number;
+      bookings: number;
+    };
+  }
   
+  export interface ProfileApiResponse {
+    data: ProfileData[];
+    meta: {
+      isFirstPage: boolean;
+      isLastPage: boolean;
+      currentPage: number;
+      previousPage: number | null;
+      nextPage: number | null;
+      pageCount: number;
+      totalCount: number;
+    };
+  }
