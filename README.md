@@ -1,36 +1,37 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+Project Report: Development of Holidaze Accommodation Booking Site
 
-## Getting Started
+Production swebite : https://holidaze-bookings.vercel.app/
+ 
+Introduction:
+The aim of this project was to develop a modern front-end accommodation booking application for Holidaze, a newly launched accommodation booking site. This report outlines the development process, including the tools, methods, and techniques used, as well as insights into the design and implementation of the application.
 
-First, run the development server:
+Project Scope:
+The project scope included two main aspects:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The customer-facing side of the website where users can book holidays at a venue.
+The admin-facing side of the website where users can register, manage venues, and bookings.
+Tools and Technologies Used:
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Next.js with TypeScript: Next.js provided a powerful framework for building React applications with server-side rendering capabilities, while TypeScript ensured type safety and improved code quality.
+Hosting by Vercel: Vercel's hosting platform offered seamless deployment and scalability, allowing for efficient development workflows.
+Tailwind CSS: Tailwind CSS was used for styling, providing a utility-first approach and facilitating rapid prototyping and customization.
+DaisyUI Design Library: DaisyUI was utilized to enhance the design aesthetics and user experience of the application, offering pre-designed components and layouts.
+Calendar: A calendar component was integrated to enable users to select dates for their bookings, enhancing usability and functionality.
+Development Process:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Planning and Preparation: The development process began with thorough planning and preparation, including defining project requirements, wireframing user interfaces, and establishing development milestones.
+Design and User Experience: With the absence of specific design requirements, emphasis was placed on creating a modern and intuitive user interface, focusing on usability and accessibility principles.
+Front-end Development: Next.js with TypeScript provided a robust foundation for front-end development, allowing for the implementation of dynamic routing, state management, and API integration.
+Styling and Layout: Tailwind CSS and DaisyUI were utilized to style components and layout elements, ensuring consistency and responsiveness across different devices and screen sizes.
+Functionality Implementation: Features such as user authentication (login, logout, register), venue booking, and admin management functionalities were implemented according to project specifications.
+Testing and Quality Assurance: Comprehensive testing was conducted to ensure the reliability, performance, and accessibility of the application, with particular attention paid to cross-browser compatibility and user experience.
+Deployment and Optimization: The application was deployed on Vercel's hosting platform, with optimizations made to improve loading times and overall performance.
+Reflection and Future Improvements:
+Throughout the development process, there was a continuous focus on evaluating and refining the creative and technical practices employed. Moving forward, potential areas for improvement include further optimization of codebase, implementation of additional features (e.g., search functionality, reviews/ratings), and ongoing maintenance to address user feedback and evolving requirements.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+Conclusion:
+In conclusion, the development of the Holidaze accommodation booking site has demonstrated the candidate's ability to plan, design, and implement a comprehensive front-end application with professional standards and focus on efficient workflows. By leveraging modern technologies and adhering to best practices in front-end development, the application provides an engaging and user-friendly experience for both customers and administrators.
 
 ## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
