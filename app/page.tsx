@@ -7,11 +7,7 @@ import SideNav from './components/sidenav';
 
 
 
-export default function Home({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function Home() {
   return (
     <>
       <Header />
@@ -21,7 +17,7 @@ export default function Home({
             <SideNav />
           </div>
         
-          <div className="flex-grow p-6 md:overflow-y-auto md:p-12">{children}<div className="max-w-5xl mx-auto px-8">
+          <div className="flex-grow p-6 md:overflow-y-auto md:p-12"><div className="max-w-5xl mx-auto px-8">
         <Venues />
   </div></div>
         </div>
